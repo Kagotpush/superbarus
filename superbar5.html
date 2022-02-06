@@ -1,0 +1,109 @@
+<style>
+  #bar {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    margin-top: 20px;
+  }
+
+  body {
+    margin-left: 0;
+  }
+</style>
+
+
+<input id="code" value="" />
+<button id="submit">Submit</button>
+<canvas id="bar" width="auto" height="50px"></canvas>
+<script>
+  document.getElementById('submit').onclick = function () {
+    console.clear()
+    var code = document.getElementById('code').value.toLowerCase()
+    var elements = document.getElementsByClassName('kek')
+    var codebar = document.getElementById('bar')
+    codebar.width = window.screen.width
+    var bar = codebar.getContext('2d')
+    bar.clearRect(0, 0, codebar.width, codebar.height);
+    var pixels_drawn = 0
+    var chars_drawn = 0
+
+    const greenValues = [
+      'gggg',
+      'ggcg',
+      'ggcc',
+      'cggg',
+      'cgcg',
+      'gccg',
+      'gggc',
+      'ccgg',
+      'gcgg',
+      'gcgc'
+    ];
+
+    const redValues = [
+      'ggggctgtgt',
+      'gtggcggtgt',
+      'agggcaggct',
+      'cgggctggat',
+      'gaggcgcgga',
+      'gaggggtggt',
+      'tcggggtggt',
+      'tgggtaggga',
+      'gtgggcgggg',
+      'ccccgcccac',
+      'cccaccccat',
+      'cccaccctcc',
+      'cagggcaggg',
+      'aggggcgggg',
+      'gtgggtgggg',
+      'ccccgtcccc'
+    ]
+
+    var color_code=str_zamenus(code, 'w'.repeat(code.length), 0)
+    var code_length=code.length
+    for (i = 0; i < code.length + 1; i++) {
+      redValues.every((value)=>{
+        if(code.substr(i, value.length)==value){
+          color_code=str_zamenus(color_code, 'r'.repeat(value.length), i)
+          code=str_zamenus(code, 'r'.repeat(value.length), i)
+          return false
+        }
+        return true
+      })
+    }
+
+    for (i = 0; i < code.length + 1; i++) {
+      greenValues.every((value)=>{
+        if(code.substr(i, value.length)==value){
+          color_code=str_zamenus(color_code, 'g'.repeat(value.length), i)
+          return false
+        }
+        return true
+      })
+    }
+
+    for (i = 0; i < color_code.length + 1; i++) {
+      var el_width = Math.floor(window.screen.width / code.length)
+      var color
+      bar.beginPath()
+      switch(color_code[i]){
+        case 'r':
+          color='#FF0000'
+          break;
+        case 'g':
+          color='#00FF00'
+          break
+        default:
+          color='#EEEEEE'
+      }
+      bar.fillStyle = color
+      bar.fillRect(pixels_drawn, 0, el_width, 50)
+      bar.stroke()
+      pixels_drawn+=el_width
+    }
+  }
+
+  function str_zamenus(str, zamena, pos){
+    return str.substr(0, pos)+zamena+str.substr(pos+zamena.length)
+  }
+</script>
